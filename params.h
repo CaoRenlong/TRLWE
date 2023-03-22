@@ -1,0 +1,10 @@
+#ifndef PARAMS_H
+#define PARAMS_H
+
+#define KYBER_N 256
+#define KYBER_Q 256
+#define TOY_N 4
+#define TOY_Q 4
+#define KYBER_INDCPA_PUBLICKEYBYTES 512
+#define KYBER_INDCPA_SECRETKEYBYTES 256
+#endif
