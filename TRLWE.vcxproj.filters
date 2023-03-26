@@ -30,6 +30,27 @@
     <ClInclude Include="indcpa.h">
       <Filter>头文件</Filter>
     </ClInclude>
+    <ClInclude Include="rng2.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="aes256ctr.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="indcpamask.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="universal.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="indcpaunmask.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="additiveRLWE.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="indcpashare.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="cbd.cpp">
@@ -45,6 +66,27 @@
       <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="rng2.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="aes256ctr.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="indcpamask.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="universal.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="indcpaunmask.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="additiveRLWE.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="indcpashare.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>

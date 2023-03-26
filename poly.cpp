@@ -11,36 +11,53 @@ void poly_4_init(poly_4* r)
 {
     memset(r, 0, 8);
 }
+int poly_equal(poly* a, poly* b) {
+    unsigned int i;
+    for (i = 0; i < TRLWE_N; i++)
+        if (a->coeffs[i] != b->coeffs[i]) {
+            return 1;
+        }
+    return 0;
+}
+int poly_compare(poly* a, poly* b) {
+    unsigned int i;
+    for (i = 0; i < TRLWE_N; i++)
+        if (a->coeffs[i] != b->coeffs[i]) {
+            printf("%d ", i+1);
+        }
+    printf("\n");
+    return 0;
+}
 void poly_add(poly* r, const poly* a, const poly* b)
 {
     unsigned int i;
-    for (i = 0; i < KYBER_N; i++)
+    for (i = 0; i < TRLWE_N; i++)
         r->coeffs[i] = (a->coeffs[i] + b->coeffs[i])&0xFF;
-    coeff_center(r, KYBER_Q);
+    coeff_center(r, TRLWE_Q);
 }
 void poly_sub(poly* r, const poly* a, const poly* b)
 {
     unsigned int i;
-    for (i = 0; i < KYBER_N; i++)
-        r->coeffs[i] = (a->coeffs[i] - b->coeffs[i]+ KYBER_Q)% KYBER_Q;
-    coeff_center(r, KYBER_Q);
+    for (i = 0; i < TRLWE_N; i++)
+        r->coeffs[i] = (a->coeffs[i] - b->coeffs[i]+ TRLWE_Q)% TRLWE_Q;
+    coeff_center(r, TRLWE_Q);
 }
 
 void poly_mul(poly* r, const poly* a, const poly* b) 
 {
     poly_init(r);
-    for (int i = 0; i < KYBER_N; i++) {
+    for (int i = 0; i < TRLWE_N; i++) {
         int16_t res = 0;
-        for (int j = 0; j < KYBER_N; j++) {
+        for (int j = 0; j < TRLWE_N; j++) {
             int16_t ab = a->coeffs[i] * b->coeffs[j];
-            int16_t ab_m = ab % KYBER_Q;
-            int8_t  sig = (i + j) > (KYBER_N - 1) ? 1 : 0;
+            int16_t ab_m = ab % TRLWE_Q;
+            int8_t  sig = (i + j) > (TRLWE_N - 1) ? 1 : 0;
             if (sig == 1) {
-                ab_m = KYBER_Q - ab_m;
+                ab_m = TRLWE_Q - ab_m;
             }
-            int16_t temp = ab_m % KYBER_Q;
+            int16_t temp = ab_m % TRLWE_Q;
             res = temp;
-            r->coeffs[(i + j) % KYBER_Q] = (res + r->coeffs[(i + j) % KYBER_Q]) % KYBER_Q;
+            r->coeffs[(i + j) % TRLWE_Q] = (res + r->coeffs[(i + j) % TRLWE_Q]) % TRLWE_Q;
         }
 
     }
@@ -65,18 +82,26 @@ void toy_poly_mul(poly_4* r, const poly_4* a, const poly_4* b) {
 }
 void poly_mul_center(poly* r, const poly* a, const poly* b) {
     poly_init(r);
-    for (int i = 0; i < KYBER_N; i++) {
-        for (int j = 0; j < KYBER_N; j++) {
+    for (int i = 0; i < TRLWE_N; i++) {
+        for (int j = 0; j < TRLWE_N; j++) {
             int16_t ab = a->coeffs[i] * b->coeffs[j];
-            int8_t  sig = (i + j) > (KYBER_N - 1) ? 1 : 0;
+            int8_t  sig = (i + j) > (TRLWE_N - 1) ? 1 : 0;
             if (sig == 1) {
                 ab = -ab;
             }
-            r->coeffs[(i + j) % KYBER_Q] = (ab + r->coeffs[(i + j) % KYBER_Q]) % KYBER_Q;
+            r->coeffs[(i + j) % TRLWE_Q] = (ab + r->coeffs[(i + j) % TRLWE_Q]) % TRLWE_Q;
         }
 
     }
-    coeff_center(r, KYBER_Q);
+    coeff_center(r, TRLWE_Q);
+}
+void poly_xor(poly* r, const poly* a, const poly* b) {
+    poly_init(r);
+    for (int i = 0; i < TRLWE_N; i++) {
+
+        r->coeffs[i] = (a->coeffs[i] + b->coeffs[i]) % 2;
+
+    }
 }
 void toy_poly_mul_center(poly_4* r, const poly_4* a, const poly_4* b) {
     poly_4_init(r);
@@ -141,7 +166,7 @@ void coeff_center_poly4(poly_4* a, uint16_t t) {
 //    //}
 //    //toy_poly_mul(rr,pp, ss);
 //    //poly_mul(r, p, s);
-//    //coeff_center(p, KYBER_Q);
+//    //coeff_center(p, TRLWE_Q);
 //    toy_poly_mul_center(rr, pp, ss);
 //    for (int i = 0; i < 4; i++) {
 //        printf("%d ",rr->coeffs[i]);

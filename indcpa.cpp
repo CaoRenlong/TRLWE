@@ -5,6 +5,7 @@
 #include "poly.h"
 #include "rng.h"
 #include "cbd.h"
+#include "universal.h"
 struct poly A;
 poly* a = &A;
 struct poly P;
@@ -13,51 +14,51 @@ struct poly M1;
 poly* m1 = &M1;
 struct poly M;
 poly* m = &M;
-void gen_a(poly* a) {
-    randompoly(a, 256);
-    printf("公钥a=\n");
-    for (int i = 0; i < 256; i++) {
-        printf("%d ", a->coeffs[i]);
-    }
-    printf("\n");
-}
-void gen_m(poly* m) {
-    randompoly_2(m, KYBER_N);
-    printf("m=\n");
-    for (int i = 0; i < 256; i++) {
-        printf("%d ", m->coeffs[i]);
-    }
-    printf("\n");
-}
-void encode(poly* m) {
-    for (int i = 0; i < KYBER_N; i++) {
-        if(m->coeffs[i]==1){
-            m->coeffs[i] = 128;
-        }
-    }
-    printf("encode(m)=\n");
-    for (int i = 0; i < 256; i++) {
-        printf("%d ", m->coeffs[i]);
-    }
-    printf("\n");
-    
-}
-void decode(poly* m) {
-    for (int i = 0; i < KYBER_N; i++) {
-        if (m->coeffs[i]>= -KYBER_Q/4 && m->coeffs[i] <= KYBER_Q / 4) {
-            m->coeffs[i] = 0;
-        }
-        else {
-            m->coeffs[i] = 1;
-        }
-    }
-    printf("decode(m1)=\n");
-    for (int i = 0; i < 256; i++) {
-        printf("%d ", m->coeffs[i]);
-    }
-    printf("\n");
-
-}
+//void gen_a(poly* a) {
+//    randompoly(a, 256);
+//    printf("公钥a=\n");
+//    for (int i = 0; i < 256; i++) {
+//        printf("%d ", a->coeffs[i]);
+//    }
+//    printf("\n");
+//}
+//void gen_m(poly* m) {
+//    randompoly_2(m, TRLWE_N);
+//    printf("m=\n");
+//    for (int i = 0; i < 256; i++) {
+//        printf("%d ", m->coeffs[i]);
+//    }
+//    printf("\n");
+//}
+//void encode(poly* m) {
+//    for (int i = 0; i < TRLWE_N; i++) {
+//        if(m->coeffs[i]==1){
+//            m->coeffs[i] = 128;
+//        }
+//    }
+//    printf("encode(m)=\n");
+//    for (int i = 0; i < 256; i++) {
+//        printf("%d ", m->coeffs[i]);
+//    }
+//    printf("\n");
+//    
+//}
+//void decode(poly* m) {
+//    for (int i = 0; i < TRLWE_N; i++) {
+//        if (m->coeffs[i]>= -TRLWE_Q/4 && m->coeffs[i] <= TRLWE_Q / 4) {
+//            m->coeffs[i] = 0;
+//        }
+//        else {
+//            m->coeffs[i] = 1;
+//        }
+//    }
+//    printf("decode(m1)=\n");
+//    for (int i = 0; i < 256; i++) {
+//        printf("%d ", m->coeffs[i]);
+//    }
+//    printf("\n");
+//
+//}
 void indcpa_keypair(poly* pk,poly* sk) {
     //struct poly A;
     //poly* a = &A;
@@ -68,10 +69,10 @@ void indcpa_keypair(poly* pk,poly* sk) {
     uint8_t buf3[64];
     randomarray(buf3, 64);
 
-    coeff_center(a, KYBER_Q);
+    coeff_center(a, TRLWE_Q);
     printf("公钥a(中心化)=\n");
     for (int i = 0; i < 256; i++) {
-        printf("%d ", a->coeffs[i]);
+        printf("%d ,", a->coeffs[i]);
     }
     printf("\n");
 
@@ -82,7 +83,7 @@ void indcpa_keypair(poly* pk,poly* sk) {
     cbd3(e0, buf1);     //生成误差e0
     printf("误差e0=\n");
     for (int i = 0; i < 256; i++) {
-        printf("%d ", e0->coeffs[i]);
+        printf("%d ,", e0->coeffs[i]);
     }
     printf("\n");
 
@@ -92,7 +93,7 @@ void indcpa_keypair(poly* pk,poly* sk) {
     cbd3(sk, buf2);     //生成私钥sk
     printf("私钥sk=\n");
     for (int i = 0; i < 256; i++) {
-        printf("%d ", sk->coeffs[i]);
+        printf("%d ,", sk->coeffs[i]);
     }
     printf("\n");
 
@@ -117,7 +118,7 @@ void indcpa_keypair(poly* pk,poly* sk) {
 
     printf("公钥p(p=e0-as)=\n");
     for (int i = 0; i < 256; i++) {
-        printf("%d ", p->coeffs[i]);
+        printf("%d ,", p->coeffs[i]);
     }
     printf("\n");
 }
@@ -125,8 +126,17 @@ void indcpa_keypair(poly* pk,poly* sk) {
 
 void indcpa_enc(poly* m, poly* c1, poly* c2) {
     gen_m(m);
+    printf("m=\n");
+    for (int i = 0; i < 256; i++) {
+        printf("%d ,", m->coeffs[i]);
+    }
+    printf("\n");
     encode(m);
-
+    printf("encode(m)=\n");
+    for (int i = 0; i < 256; i++) {
+        printf("%d ", m->coeffs[i]);
+    }
+    printf("\n");
     struct poly E1;
     poly* e1 = &E1;
     uint8_t buf1[64];
@@ -134,7 +144,7 @@ void indcpa_enc(poly* m, poly* c1, poly* c2) {
     cbd3(e1, buf1);     //生成误差e0
     printf("误差e1=\n");
     for (int i = 0; i < 256; i++) {
-        printf("%d ", e1->coeffs[i]);
+        printf("%d ,", e1->coeffs[i]);
     }
     printf("\n");
     struct poly E2;
@@ -144,7 +154,7 @@ void indcpa_enc(poly* m, poly* c1, poly* c2) {
     cbd3(e2, buf2);     //生成误差e0
     printf("误差e2=\n");
     for (int i = 0; i < 256; i++) {
-        printf("%d ", e2->coeffs[i]);
+        printf("%d ,", e2->coeffs[i]);
     }
     printf("\n");
     struct poly E3;
@@ -154,7 +164,7 @@ void indcpa_enc(poly* m, poly* c1, poly* c2) {
     cbd3(e3, buf3);     //生成误差e0
     printf("误差e3=\n");
     for (int i = 0; i < 256; i++) {
-        printf("%d ", e3->coeffs[i]);
+        printf("%d ,", e3->coeffs[i]);
     }
     printf("\n");
 
@@ -224,6 +234,12 @@ void indcpa_dec(poly* m1, poly* c1, poly* c2,poly* sk) {
     printf("\n");
 
     decode(m1);
+    printf("m1=\n");
+    for (int i = 0; i < 256; i++) {
+        printf("%d ", m1->coeffs[i]);
+    }
+    printf("\n");
+    decode(m);
     printf("m=\n");
     for (int i = 0; i < 256; i++) {
         printf("%d ", m->coeffs[i]);
@@ -236,7 +252,20 @@ void indcpa_dec(poly* m1, poly* c1, poly* c2,poly* sk) {
 //    poly* p = &P;
 //    poly* s = &S;
 //    indcpa_keypair(p, s);
-//    indcpa_enc();
+//    struct poly C1;
+//    poly* c1 = &C1;
+//    struct poly C2;
+//    poly* c2 = &C2;
+//    indcpa_enc(m,c1,c2);
+//    indcpa_dec(m1, c1, c2, s);
+//    poly_compare(m1, m);
+//    if (poly_equal(m1, m)) {
+//        printf("加解密失败！");
+//    }
+//    else
+//    {
+//        printf("加解密成功！");
+//    }
 //    //uint8_t buf[64];
 //    //randomarray(buf, 64);
 //    //cbd3(s, buf);

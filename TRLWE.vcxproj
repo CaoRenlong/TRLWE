@@ -70,6 +70,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>C:\Program Files\OpenSSL-Win64\include;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Program Files\OpenSSL-Win64\lib;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -108,6 +112,7 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalDependencies>libcrypto.lib;openssl.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -127,18 +132,32 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="additiveRLWE.h" />
+    <ClInclude Include="aes256ctr.h" />
     <ClInclude Include="cbd.h" />
     <ClInclude Include="indcpa.h" />
+    <ClInclude Include="indcpamask.h" />
+    <ClInclude Include="indcpashare.h" />
+    <ClInclude Include="indcpaunmask.h" />
     <ClInclude Include="params.h" />
     <ClInclude Include="poly.h" />
     <ClInclude Include="rng.h" />
+    <ClInclude Include="rng2.h" />
+    <ClInclude Include="universal.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="additiveRLWE.cpp" />
+    <ClCompile Include="aes256ctr.cpp" />
     <ClCompile Include="cbd.cpp" />
     <ClCompile Include="indcpa.cpp" />
+    <ClCompile Include="indcpamask.cpp" />
+    <ClCompile Include="indcpashare.cpp" />
+    <ClCompile Include="indcpaunmask.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="poly.cpp" />
     <ClCompile Include="rng.cpp" />
+    <ClCompile Include="rng2.cpp" />
+    <ClCompile Include="universal.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
